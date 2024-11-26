@@ -166,3 +166,72 @@ a.secondary {
     filter: invert();
   }
 }
+
+.narutoContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.narutoArea {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 colunas no grid */
+  gap: 20px;
+  /* Espaçamento entre os cards */
+}
+
+.narutoArea img {
+  display: block;
+  width: 100%;
+  /* Adapta-se ao tamanho do contêiner pai */
+  height: 200px;
+  /* Altura fixa para consistência */
+  object-fit: cover;
+  /* Ajusta o conteúdo da imagem dentro do tamanho definido */
+  border-radius: 8px;
+  /* Bordas arredondadas (opcional) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  /* Sombra para estética (opcional) */
+}
+
+.characterCard {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.characterCard h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1rem;
+  font-weight: bold;
+}
