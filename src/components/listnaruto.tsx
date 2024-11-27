@@ -17,27 +17,22 @@ type Naruto = {
   uniqueTraits: string[];
 };
 
-type Characters = {
-  characters: Naruto[];
-  currentPage: number;
-  pageSize: number;
-  totalCharacters: number;
-};
 
 export default function ListaNaruto() {
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [characters, setCharacters] = React.useState([]);
+  const [characters, setCharacters] = React.useState<Naruto[]>([]);
   const [pageSize, setPageSize] = React.useState(20);
   const [totalCharacters, setTotalCharacters] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
+  const totalPages = Math.ceil(totalCharacters / pageSize);
 
 
 
   async function ApiNaruto(page: number) {
     try {
       setLoading(true);
-      const response = await fetch(`https://narutodb.xyz/api/character/?page=${page}`);
-      const data = (await response.json());
+      const response = await fetch(`https://narutodb.xyz/api/character?page=${page}`);      
+      const data = await response.json();
       setCharacters(data.characters);
       setCurrentPage(data.currentPage);
       setPageSize(data.pageSize);
@@ -54,7 +49,17 @@ export default function ListaNaruto() {
   }, [currentPage]);
 
 
+function handlePreviousPage() {
+  if(currentPage === 1)return;
+  setCurrentPage(currentPage -1);
+ 
 
+}
+
+function handleNextPage(){
+  if(currentPage === totalPages)return;
+    setCurrentPage(currentPage +1);
+}
 
 
   return (
@@ -75,6 +80,14 @@ export default function ListaNaruto() {
           ))
         )}
       </div>
+
+      <div className={styles.pagination}>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>Anterior</button>
+        <span>Página {currentPage} de {Math.ceil(totalCharacters / pageSize)}</span>
+        <button onClick={handleNextPage} disabled={currentPage === Math.ceil(totalCharacters / pageSize)}>Próximo</button>
+      </div>
+
+  
 
     </div>
 
