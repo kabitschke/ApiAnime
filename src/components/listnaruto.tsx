@@ -1,4 +1,5 @@
 'use client'
+import { ApiNaruto } from '@/app/api/apiAnime';
 import styles from '@/app/page.module.css';
 import React from 'react';
 
@@ -17,6 +18,13 @@ type Naruto = {
   uniqueTraits: string[];
 };
 
+type Characters = {
+  characters: Naruto[];
+  pageSize: number;
+  totalCharacters: number;
+  currentPage: number;
+}
+
 
 export default function ListaNaruto() {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -26,34 +34,30 @@ export default function ListaNaruto() {
   const [loading, setLoading] = React.useState(false);
   const totalPages = Math.ceil(totalCharacters / pageSize);
 
+async function gridAnime(){
+  try{
+    setLoading(true);
+    const data:Characters = await ApiNaruto(currentPage);
+    setCharacters(data.characters);
+    setPageSize(data.pageSize);
+    setTotalCharacters(data.totalCharacters);
+  }catch(error){
+    console.error('Erro ao buscar os dados', error);
+  }finally{
+    setLoading(false);
+  }  
+  
+}
 
-
-  async function ApiNaruto(page: number) {
-    try {
-      setLoading(true);
-      const response = await fetch(`https://narutodb.xyz/api/character?page=${page}`);      
-      const data = await response.json();
-      setCharacters(data.characters);
-      setCurrentPage(data.currentPage);
-      setPageSize(data.pageSize);
-      setTotalCharacters(data.totalCharacters);
-    } catch (error) {
-      console.error('Erro ao buscar personagens:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   React.useEffect(() => {
-    ApiNaruto(currentPage);// Busca os personagens da página atual
+    gridAnime();// Busca os personagens da página atual
   }, [currentPage]);
 
 
 function handlePreviousPage() {
   if(currentPage === 1)return;
   setCurrentPage(currentPage -1);
- 
-
 }
 
 function handleNextPage(){
@@ -84,7 +88,13 @@ function handleNextPage(){
       <div className={styles.pagination}>
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>Anterior</button>
         <span>Página {currentPage} de {Math.ceil(totalCharacters / pageSize)}</span>
-        <button onClick={handleNextPage} disabled={currentPage === Math.ceil(totalCharacters / pageSize)}>Próximo</button>
+
+        <div className={styles.squareArea}>
+
+          
+        </div>
+
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>Próximo</button>
       </div>
 
   

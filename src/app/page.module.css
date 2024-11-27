@@ -235,3 +235,20 @@ a.secondary {
   font-size: 1rem;
   font-weight: bold;
 }
+
+.squareArea{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.square{
+  display: flex;
+  width: 20px;
+  height: 20px;
+  padding: 10px; 
+  border: 1px solid #333;
+}
