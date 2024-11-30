@@ -34,20 +34,20 @@ export default function ListaNaruto() {
   const [loading, setLoading] = React.useState(false);
   const totalPages = Math.ceil(totalCharacters / pageSize);
 
-async function gridAnime(){
-  try{
-    setLoading(true);
-    const data:Characters = await ApiNaruto(currentPage);
-    setCharacters(data.characters);
-    setPageSize(data.pageSize);
-    setTotalCharacters(data.totalCharacters);
-  }catch(error){
-    console.error('Erro ao buscar os dados', error);
-  }finally{
-    setLoading(false);
-  }  
-  
-}
+  async function gridAnime() {
+    try {
+      setLoading(true);
+      const data: Characters = await ApiNaruto(currentPage);
+      setCharacters(data.characters);
+      setPageSize(data.pageSize);
+      setTotalCharacters(data.totalCharacters);
+    } catch (error) {
+      console.error('Erro ao buscar os dados', error);
+    } finally {
+      setLoading(false);
+    }
+
+  }
 
 
   React.useEffect(() => {
@@ -55,15 +55,43 @@ async function gridAnime(){
   }, [currentPage]);
 
 
-function handlePreviousPage() {
-  if(currentPage === 1)return;
-  setCurrentPage(currentPage -1);
-}
+  // function handlePreviousPage() {
+  //   if (currentPage === 1) return;
+  //   setCurrentPage(currentPage - 1);
+  // }
 
-function handleNextPage(){
-  if(currentPage === totalPages)return;
-    setCurrentPage(currentPage +1);
-}
+  // function handleNextPage() {
+  //   if (currentPage === totalPages) return;
+  //   setCurrentPage(currentPage + 1);
+  // }
+
+  function Pagination() {
+    const pages = [];
+    const half = Math.floor(pageSize / 2);//metade
+    const start = Math.max(1, currentPage - half);
+    const end = Math.min(totalPages, currentPage + half);
+    console.log('start', start, 'end', end);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(
+        <div key={i}
+          className={styles.square}
+          style={{
+            backgroundColor: i === currentPage ? '#007bff' : '#fff',
+            color: i === currentPage ? '#fff' : '#000',
+          }}
+          onClick={() => onPageChange(i)}
+        >
+          {i}
+        </div>
+      );
+    }
+    return pages;
+  }
+
+  function onPageChange(i: number) {
+    setCurrentPage(i);
+  }
 
 
   return (
@@ -86,18 +114,18 @@ function handleNextPage(){
       </div>
 
       <div className={styles.pagination}>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>Anterior</button>
-        <span>Página {currentPage} de {Math.ceil(totalCharacters / pageSize)}</span>
+        {/* <button onClick={handlePreviousPage} disabled={currentPage === 1}>Anterior</button> */}
+        {/* <span>Página {currentPage} de {Math.ceil(totalCharacters / pageSize)}</span> */}
 
         <div className={styles.squareArea}>
+          {Pagination()}
 
-          
         </div>
 
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>Próximo</button>
+        {/* <button onClick={handleNextPage} disabled={currentPage === totalPages}>Próximo</button> */}
       </div>
 
-  
+
 
     </div>
 
