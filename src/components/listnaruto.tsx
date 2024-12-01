@@ -67,14 +67,30 @@ export default function ListaNaruto() {
 
   function Pagination() {
     const pages = [];
-    const half = Math.floor(pageSize / 2);//metade
-    const start = Math.max(1, currentPage - half);
-    const end = Math.min(totalPages, currentPage + half);
-    console.log('start', start, 'end', end);
-
+    const margem = 5;  // Define as margens de 5 páginas
+  
+    let start = 1;
+    let end = 1;
+  
+    // Se o currentPage for maior que 4, começa a calcular para exibir as 5 páginas anteriores e 5 páginas posteriores
+    if (currentPage >= margem) {
+      start = Math.max(1, currentPage - margem);  // 5 páginas anteriores
+      end = Math.min(totalPages, currentPage + margem);  // 5 páginas posteriores
+    }    
+    // Para as páginas 1 a 4, exibe até a página 10
+    if (currentPage < margem) {
+      end = Math.min(totalPages, margem * 2);  // Exibe até a página 10 ou o total de páginas
+    }
+    // Para as páginas maiores que totalPages - margem * 2, ajusta o start para mostrar as últimas páginas
+    if (currentPage >= totalPages - margem) {
+      start = Math.max(1, totalPages - margem * 2); // Exibe as últimas páginas, até 5 páginas antes da última
+      end = totalPages;  // Até a última página
+    }
+  
     for (let i = start; i <= end; i++) {
       pages.push(
-        <div key={i}
+        <div
+          key={i}
           className={styles.square}
           style={{
             backgroundColor: i === currentPage ? '#007bff' : '#fff',
@@ -86,12 +102,15 @@ export default function ListaNaruto() {
         </div>
       );
     }
+  
     return pages;
   }
-
+  
   function onPageChange(i: number) {
     setCurrentPage(i);
   }
+  
+  
 
 
   return (
